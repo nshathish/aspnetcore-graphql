@@ -1,5 +1,3 @@
-
-
 namespace Aspnetcore.Graphql
 {
     using Data;
@@ -8,11 +6,9 @@ namespace Aspnetcore.Graphql
     using Infrastructure.Schemas;
     using Infrastructure.Types;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
     using Repositories;
 
     public class Startup
@@ -31,9 +27,12 @@ namespace Aspnetcore.Graphql
                 options.UseSqlite(Configuration.GetConnectionString("SqliteConnection")));
 
             services.AddScoped<ProductRepository>();
+            services.AddScoped<ProductReviewRepository>();
 
-            services.AddScoped<ProductType>()
+            services
+                .AddScoped<ProductType>()
                 .AddScoped<ProductTypeEnumType>()
+                .AddScoped<ProductReviewType>()
                 .AddScoped<CarvedRockQuery>()
                 .AddScoped<CarvedRockSchema>()
                 .AddGraphQL(options => options.EnableMetrics = true)
@@ -48,7 +47,6 @@ namespace Aspnetcore.Graphql
             app.UseGraphQLPlayground();
 
             dbContext.Seed();
-
         }
     }
 }

@@ -5,13 +5,11 @@
     using Microsoft.Extensions.DependencyInjection;
     using Queries;
 
-    public class CarvedRockSchema: Schema
+    public class CarvedRockSchema : Schema
     {
-        public CarvedRockSchema(IServiceProvider serviceProvider)
+        public CarvedRockSchema(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             Query = serviceProvider.GetRequiredService<CarvedRockQuery>();
-
         }
-        
     }
 }
