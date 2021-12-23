@@ -8,6 +8,9 @@
     {
         public static void Seed(this SqliteDbContext dbContext)
         {
+            dbContext.Database.EnsureDeleted();
+            dbContext.Database.EnsureCreated();
+
             if (!dbContext.Products.Any())
             {
                 dbContext.Products.Add(new Product

@@ -3,12 +3,17 @@
 namespace Aspnetcore.Graphql
 {
     using Data;
+    using GraphQL.Server;
+    using Infrastructure.Queries;
+    using Infrastructure.Schemas;
+    using Infrastructure.Types;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Repositories;
 
     public class Startup
     {
@@ -24,25 +29,26 @@ namespace Aspnetcore.Graphql
         {
             services.AddDbContext<SqliteDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("SqliteConnection")));
-            services.AddControllers();
+
+            services.AddScoped<ProductRepository>();
+
+            services.AddScoped<ProductType>()
+                .AddScoped<ProductTypeEnumType>()
+                .AddScoped<CarvedRockQuery>()
+                .AddScoped<CarvedRockSchema>()
+                .AddGraphQL(options => options.EnableMetrics = true)
+                .AddSystemTextJson()
+                .AddErrorInfoProvider(options => options.ExposeExceptionStackTrace = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, SqliteDbContext dbContext)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseGraphQL<CarvedRockSchema>();
+            app.UseGraphQLPlayground();
 
-            app.UseRouting();
+            dbContext.Seed();
 
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
         }
     }
 }
