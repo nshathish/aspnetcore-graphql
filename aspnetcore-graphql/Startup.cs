@@ -2,6 +2,7 @@ namespace Aspnetcore.Graphql
 {
     using Data;
     using GraphQL.Server;
+    using Infrastructure.Mutations;
     using Infrastructure.Queries;
     using Infrastructure.Schemas;
     using Infrastructure.Types;
@@ -33,7 +34,9 @@ namespace Aspnetcore.Graphql
                 .AddScoped<ProductType>()
                 .AddScoped<ProductTypeEnumType>()
                 .AddScoped<ProductReviewType>()
+                .AddScoped<ProductReviewInputType>()
                 .AddScoped<CarvedRockQuery>()
+                .AddScoped<CarvedRockMutation>()
                 .AddScoped<CarvedRockSchema>()
                 .AddGraphQL(options => options.EnableMetrics = true)
                 .AddDataLoader()
