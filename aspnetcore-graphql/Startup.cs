@@ -36,6 +36,7 @@ namespace Aspnetcore.Graphql
                 .AddScoped<CarvedRockQuery>()
                 .AddScoped<CarvedRockSchema>()
                 .AddGraphQL(options => options.EnableMetrics = true)
+                .AddDataLoader()
                 .AddSystemTextJson()
                 .AddErrorInfoProvider(options => options.ExposeExceptionStackTrace = true);
         }
@@ -46,7 +47,7 @@ namespace Aspnetcore.Graphql
             app.UseGraphQL<CarvedRockSchema>();
             app.UseGraphQLPlayground();
 
-            dbContext.Seed();
+            // dbContext.Seed();
         }
     }
 }

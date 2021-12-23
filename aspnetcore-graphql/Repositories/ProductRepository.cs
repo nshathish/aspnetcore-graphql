@@ -13,5 +13,8 @@
         public ProductRepository(SqliteDbContext dbContext)=> _dbContext = dbContext;
 
         public Task<List<Product>> GetAll()=> _dbContext.Products.ToListAsync();
+
+        public Task<Product> GetOne(int id)=> _dbContext.Products.SingleAsync(p => p.Id == id);
+
     }
 }
